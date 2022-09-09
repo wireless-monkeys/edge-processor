@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+option go_package = "github.com/wireless-monkeys/backend/pkg/api";
+
+package api;
+
+message Empty {
+
+}

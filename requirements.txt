@@ -1,2 +1,4 @@
 opencv-python==4.6.0.66
 imutils==0.5.4
+grpcio===1.48.1
+grpcio-tools===1.48.1

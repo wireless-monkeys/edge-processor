@@ -13,3 +13,9 @@ $ source venv/bin/activate
 ```bash
 $ pip3 install -r requirements.txt
 ```
+
+To compile proto:
+```bash
+$ python3 -m grpc_tools.protoc -I protos --python_out=src/stubs --grpc_python_out=src/stubs protos/*.proto
+```
+This will generate stubs in `src/stubs` directory.

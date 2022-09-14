@@ -1,4 +1,5 @@
 # import the necessary packages
+from cmath import nan
 from imutils.video import VideoStream
 import numpy as np
 import argparse
@@ -6,6 +7,7 @@ import imutils
 import time
 import cv2
 import grpc
+from google.protobuf.timestamp_pb2 import Timestamp
 from stubs import edge_service_pb2_grpc
 
 channel = grpc.insecure_channel('wm.suphon.dev:4000')
@@ -76,7 +78,15 @@ def getImageAndNumberOfPeople() :
 # loop over the frames from the video stream
 while True:
     (people_count, frame) = getImageAndNumberOfPeople()
-    stub.SetData()
+    
+    # Create timestamp
+    now = time.time()
+    seconds = int(now)
+    nanos = int((now-seconds)*1e9)
+    timestamp = Timestamp(seconds=seconds, nanos=nanos)
+
+    # Send data to server
+    stub.SetData(timestamp=timestamp ,number_f__people=people_count, camera_image=bytes(frame))
 
     time.sleep(1)
     # show the output frame

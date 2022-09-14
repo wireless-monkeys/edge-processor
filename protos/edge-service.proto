@@ -4,8 +4,17 @@ option go_package = "github.com/wireless-monkeys/backend/pkg/api";
 
 package api;
 
+import "google/protobuf/timestamp.proto";
 import "utils.proto";
 
 service EdgeService {
   rpc Heartbeat (Empty) returns (Empty) {}
+
+  rpc SetData (SetDataRequest) returns (Empty) {}
+}
+
+message SetDataRequest {
+  google.protobuf.Timestamp timestamp = 1;
+  int64 number_of_people = 2;
+  bytes camera_image = 3;
 }

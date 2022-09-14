@@ -1,1 +1,2 @@
 python test_local.py --prototxt deploy.prototxt.txt --model deploy.caffemodel
+python main.py --prototxt ./model/deploy.prototxt.txt --model ./model/deploy.caffemodel

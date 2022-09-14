@@ -2,6 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
+import edge_service_pb2 as edge__service__pb2
 import utils_pb2 as utils__pb2
 
 
@@ -19,6 +20,11 @@ class EdgeServiceStub(object):
                 request_serializer=utils__pb2.Empty.SerializeToString,
                 response_deserializer=utils__pb2.Empty.FromString,
                 )
+        self.SetData = channel.unary_unary(
+                '/api.EdgeService/SetData',
+                request_serializer=edge__service__pb2.SetDataRequest.SerializeToString,
+                response_deserializer=utils__pb2.Empty.FromString,
+                )
 
 
 class EdgeServiceServicer(object):
@@ -30,12 +36,23 @@ class EdgeServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def SetData(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_EdgeServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'Heartbeat': grpc.unary_unary_rpc_method_handler(
                     servicer.Heartbeat,
                     request_deserializer=utils__pb2.Empty.FromString,
+                    response_serializer=utils__pb2.Empty.SerializeToString,
+            ),
+            'SetData': grpc.unary_unary_rpc_method_handler(
+                    servicer.SetData,
+                    request_deserializer=edge__service__pb2.SetDataRequest.FromString,
                     response_serializer=utils__pb2.Empty.SerializeToString,
             ),
     }
@@ -61,6 +78,23 @@ class EdgeService(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/api.EdgeService/Heartbeat',
             utils__pb2.Empty.SerializeToString,
+            utils__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def SetData(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/api.EdgeService/SetData',
+            edge__service__pb2.SetDataRequest.SerializeToString,
             utils__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

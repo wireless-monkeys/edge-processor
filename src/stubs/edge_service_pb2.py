@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
-import utils_pb2 as utils__pb2
+from . import utils_pb2 as utils__pb2
 
 
 DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x12\x65\x64ge-service.proto\x12\x03\x61pi\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x0butils.proto\"o\n\x0eSetDataRequest\x12-\n\ttimestamp\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x18\n\x10number_of_people\x18\x02 \x01(\x03\x12\x14\n\x0c\x63\x61mera_image\x18\x03 \x01(\x0c\x32\x62\n\x0b\x45\x64geService\x12%\n\tHeartbeat\x12\n.api.Empty\x1a\n.api.Empty\"\x00\x12,\n\x07SetData\x12\x13.api.SetDataRequest\x1a\n.api.Empty\"\x00\x42-Z+github.com/wireless-monkeys/backend/pkg/apib\x06proto3')

@@ -2,8 +2,8 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import edge_service_pb2 as edge__service__pb2
-import utils_pb2 as utils__pb2
+from . import edge_service_pb2 as edge__service__pb2
+from . import utils_pb2 as utils__pb2
 
 
 class EdgeServiceStub(object):

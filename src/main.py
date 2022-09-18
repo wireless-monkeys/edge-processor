@@ -83,10 +83,10 @@ while True:
     now = time.time()
     seconds = int(now)
     nanos = int((now-seconds)*1e9)
-    timestamp = Timestamp(seconds=seconds, nanos=nanos)
+    t = Timestamp(seconds=seconds, nanos=nanos)
 
     # Send data to server
-    stub.SetData(timestamp=timestamp ,number_f__people=people_count, camera_image=bytes(frame))
+    stub.SetData(timestamp=t ,number_of_people=people_count, camera_image=bytes(frame))
 
     time.sleep(1)
     # show the output frame

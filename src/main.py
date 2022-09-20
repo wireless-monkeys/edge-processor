@@ -8,7 +8,7 @@ import time
 import cv2
 import grpc
 from google.protobuf.timestamp_pb2 import Timestamp
-from stubs import edge_service_pb2_grpc
+from stubs import edge_service_pb2_grpc, edge_service_pb2 
 
 channel = grpc.insecure_channel('wm.suphon.dev:4000')
 stub = edge_service_pb2_grpc.EdgeServiceStub(channel)
@@ -86,7 +86,8 @@ while True:
     t = Timestamp(seconds=seconds, nanos=nanos)
 
     # Send data to server
-    stub.SetData(timestamp=t ,number_of_people=people_count, camera_image=bytes(frame))
+    obj = edge_service_pb2.SetDataRequest(timestamp=t ,number_of_people=people_count, camera_image=bytes(frame))
+    stub.SetData(obj)
 
     time.sleep(1)
     # show the output frame

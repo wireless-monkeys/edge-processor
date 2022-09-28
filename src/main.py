@@ -100,8 +100,6 @@ def sendImages() :
             # do a bit of cleanup
             cv2.destroyAllWindows()
             vs.stop()
-            break
-        print('Sending Images')
 
 x = threading.Thread(target=sendImages)
 x.start()

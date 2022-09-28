@@ -8,7 +8,8 @@ import time
 import cv2
 import grpc
 from google.protobuf.timestamp_pb2 import Timestamp
-from stubs import edge_service_pb2_grpc, edge_service_pb2 
+from stubs import edge_service_pb2_grpc, edge_service_pb2
+import threading
 
 channel = grpc.insecure_channel('wm.suphon.dev:4000')
 stub = edge_service_pb2_grpc.EdgeServiceStub(channel)
@@ -37,7 +38,7 @@ net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
 # initialize the video stream, allow the cammera sensor to warmup
 print("[INFO] starting video stream...")
 vs = VideoStream(src=0).start()
-time.sleep(2.0)
+time.sleep(1.0)
 
 def getImageAndNumberOfPeople() :
     # grab the frame from the threaded video stream and resize it
@@ -75,28 +76,32 @@ def getImageAndNumberOfPeople() :
             cv2.putText(frame, label, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
     return (people_count, frame)
 
-# loop over the frames from the video stream
-while True:
-    (people_count, frame) = getImageAndNumberOfPeople()
-    
-    # Create timestamp
-    now = time.time()
-    seconds = int(now)
-    nanos = int((now-seconds)*1e9)
-    t = Timestamp(seconds=seconds, nanos=nanos)
+def sendImages() :
+    while True:
+        (people_count, frame) = getImageAndNumberOfPeople()
+        
+        # Create timestamp
+        now = time.time()
+        seconds = int(now)
+        nanos = int((now-seconds)*1e9)
+        t = Timestamp(seconds=seconds, nanos=nanos)
 
-    # Send data to server
-    obj = edge_service_pb2.SetDataRequest(timestamp=t ,number_of_people=people_count, camera_image=bytes(frame))
-    stub.SetData(obj)
+        # Send data to server
+        obj = edge_service_pb2.SetDataRequest(timestamp=t ,number_of_people=people_count, camera_image=bytes(frame))
+        stub.SetData(obj)
 
-    time.sleep(1)
-    # show the output frame
-    cv2.imshow("Frame", frame)
-    key = cv2.waitKey(1) & 0xFF
-	# if the `q` key was pressed, break from the loop
-    if key == ord("q"):
-        break
+        time.sleep(0.5)
+        # show the output frame
+        cv2.imshow("Frame", frame)
+        
+        key = cv2.waitKey(1) & 0xFF
+        # if the `q` key was pressed, break from the loop
+        if key == ord("q"):
+            # do a bit of cleanup
+            cv2.destroyAllWindows()
+            vs.stop()
+            break
+        print('Sending Images')
 
-# do a bit of cleanup
-cv2.destroyAllWindows()
-vs.stop()
+x = threading.Thread(target=sendImages)
+x.start()

@@ -27,6 +27,9 @@ ap.add_argument(
     default=0.6,
     help="minimum probability to filter weak detections",
 )
+ap.add_argument(
+    "-s", "--show", action="store_true", help="path to Caffe pre-trained model"
+)
 args = vars(ap.parse_args())
 
 # initialize the list of class labels MobileNet SSD was trained to
@@ -125,11 +128,12 @@ while True:
 
     # time.sleep(0.5)
     # show the output frame
-    cv2.imshow("Frame", frame)
+    if args["show"]:
+        cv2.imshow("Frame", frame)
 
-    key = cv2.waitKey(1) & 0xFF
-    # if the `q` key was pressed, break from the loop
-    if key == ord("q"):
-        # do a bit of cleanup
-        cv2.destroyAllWindows()
-        vs.stop()
+        key = cv2.waitKey(1) & 0xFF
+        # if the `q` key was pressed, break from the loop
+        if key == ord("q"):
+            # do a bit of cleanup
+            cv2.destroyAllWindows()
+            vs.stop()

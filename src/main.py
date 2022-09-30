@@ -11,7 +11,7 @@ from google.protobuf.timestamp_pb2 import Timestamp
 from stubs import edge_service_pb2_grpc, edge_service_pb2
 import threading
 
-channel = grpc.aio.insecure_channel("wm.suphon.dev:4000")
+channel = grpc.insecure_channel("wm.suphon.dev:4000")
 stub = edge_service_pb2_grpc.EdgeServiceStub(channel)
 
 # construct the argument parse and parse the arguments
@@ -24,7 +24,7 @@ ap.add_argument(
     "-c",
     "--confidence",
     type=float,
-    default=0.2,
+    default=0.6,
     help="minimum probability to filter weak detections",
 )
 args = vars(ap.parse_args())

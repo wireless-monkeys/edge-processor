@@ -1,5 +1,4 @@
 # import the necessary packages
-from cmath import nan
 from imutils.video import VideoStream
 import numpy as np
 import argparse
@@ -9,7 +8,6 @@ import cv2
 import grpc
 from google.protobuf.timestamp_pb2 import Timestamp
 from stubs import edge_service_pb2_grpc, edge_service_pb2
-import threading
 
 channel = grpc.insecure_channel("wm.suphon.dev:4000")
 stub = edge_service_pb2_grpc.EdgeServiceStub(channel)

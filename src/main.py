@@ -7,6 +7,7 @@ import time
 import cv2
 import grpc
 from google.protobuf.timestamp_pb2 import Timestamp
+from .led import set_led_output
 from stubs import edge_service_pb2_grpc, edge_service_pb2
 
 channel = grpc.insecure_channel("wm.suphon.dev:4000")
@@ -27,6 +28,13 @@ ap.add_argument(
 )
 ap.add_argument(
     "-s", "--show", action="store_true", help="path to Caffe pre-trained model"
+)
+ap.add_argument(
+    "-d",
+    "--delay-led",
+    type=float,
+    default=60,
+    help="number of seconds before turning off the led",
 )
 args = vars(ap.parse_args())
 
@@ -107,6 +115,8 @@ def getImageAndNumberOfPeople():
     return (people_count, frame)
 
 
+last_timestamp_with_people = 0
+
 while True:
     (people_count, frame) = getImageAndNumberOfPeople()
 
@@ -123,6 +133,13 @@ while True:
         camera_image=cv2.imencode(".jpg", frame)[1].tobytes(),
     )
     stub.SetData(obj)
+
+    if people_count > 0:
+        last_timestamp_with_people = time.time()
+    if time.time() - last_timestamp_with_people > args["delay-led"]:
+        set_led_output(False)
+    else:
+        set_led_output(True)
 
     # time.sleep(0.5)
     # show the output frame

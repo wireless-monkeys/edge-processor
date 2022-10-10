@@ -19,3 +19,9 @@ To compile proto:
 $ python3 -m grpc_tools.protoc -I protos --python_out=src/stubs --grpc_python_out=src/stubs protos/*.proto
 ```
 This will generate stubs in `src/stubs` directory.
+
+## Deploying
+Run
+```bash
+python src/main.py --prototxt src/model/deploy.prototxt.txt --model src/model/deploy.caffemodel --delay-led 5
+```

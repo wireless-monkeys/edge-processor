@@ -7,7 +7,7 @@ import time
 import cv2
 import grpc
 from google.protobuf.timestamp_pb2 import Timestamp
-from .led import set_led_output
+from led import set_led_output
 from stubs import edge_service_pb2_grpc, edge_service_pb2
 
 channel = grpc.insecure_channel("wm.suphon.dev:4000")
@@ -30,8 +30,8 @@ ap.add_argument(
     "-s", "--show", action="store_true", help="path to Caffe pre-trained model"
 )
 ap.add_argument(
-    "-d",
-    "--delay-led",
+    "-c",
+    "--cutoff",
     type=float,
     default=60,
     help="number of seconds before turning off the led",
@@ -136,7 +136,7 @@ while True:
 
     if people_count > 0:
         last_timestamp_with_people = time.time()
-    if time.time() - last_timestamp_with_people > args["delay-led"]:
+    if time.time() - last_timestamp_with_people > args["cutoff"]:
         set_led_output(False)
     else:
         set_led_output(True)

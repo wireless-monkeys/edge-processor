@@ -7,7 +7,6 @@ import time
 import cv2
 import grpc
 from google.protobuf.timestamp_pb2 import Timestamp
-from pem import Key
 from led import set_led_output, cleanup
 from stubs import edge_service_pb2_grpc, edge_service_pb2
 

@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO  # Import Raspberry Pi GPIO library
 
 GPIO.setmode(GPIO.BOARD)  # Use physical pin numbering
-GPIO_PIN = 3
+GPIO_PIN = 8
 GPIO.setup(GPIO_PIN, GPIO.OUT, initial=GPIO.LOW)
 
 

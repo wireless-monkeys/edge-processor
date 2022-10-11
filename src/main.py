@@ -30,7 +30,7 @@ ap.add_argument(
     "-s", "--show", action="store_true", help="path to Caffe pre-trained model"
 )
 ap.add_argument(
-    "-c",
+    "-co",
     "--cutoff",
     type=float,
     default=60,
@@ -103,15 +103,21 @@ def getImageAndNumberOfPeople():
             idx = int(detections[0, 0, i, 1])
             if CLASSES[idx] == "person":
                 people_count += 1
-            box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
-            (startX, startY, endX, endY) = box.astype("int")
-            # draw the prediction on the frame
-            label = "{}: {:.2f}%".format(CLASSES[idx], confidence * 100)
-            cv2.rectangle(frame, (startX, startY), (endX, endY), COLORS[idx], 2)
-            y = startY - 15 if startY - 15 > 15 else startY + 15
-            cv2.putText(
-                frame, label, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2
-            )
+                box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
+                (startX, startY, endX, endY) = box.astype("int")
+                # draw the prediction on the frame
+                label = "{}: {:.2f}%".format(CLASSES[idx], confidence * 100)
+                cv2.rectangle(frame, (startX, startY), (endX, endY), COLORS[idx], 2)
+                y = startY - 15 if startY - 15 > 15 else startY + 15
+                cv2.putText(
+                    frame,
+                    label,
+                    (startX, y),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.5,
+                    COLORS[idx],
+                    2,
+                )
     return (people_count, frame)
 
 
@@ -136,10 +142,10 @@ while True:
 
     if people_count > 0:
         last_timestamp_with_people = time.time()
-    if time.time() - last_timestamp_with_people > args["cutoff"]:
-        set_led_output(False)
-    else:
-        set_led_output(True)
+    # if time.time() - last_timestamp_with_people > args["cutoff"]:
+    #     set_led_output(False)
+    # else:
+    #     set_led_output(True)
 
     # time.sleep(0.5)
     # show the output frame

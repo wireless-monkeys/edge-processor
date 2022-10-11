@@ -10,3 +10,7 @@ def set_led_output(status):
         GPIO.output(GPIO_PIN, GPIO.HIGH)
     else:
         GPIO.output(GPIO_PIN, GPIO.LOW)
+
+
+def cleanup():
+    GPIO.cleanup()

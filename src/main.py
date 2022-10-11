@@ -7,7 +7,8 @@ import time
 import cv2
 import grpc
 from google.protobuf.timestamp_pb2 import Timestamp
-from led import set_led_output
+from pem import Key
+from led import set_led_output, cleanup
 from stubs import edge_service_pb2_grpc, edge_service_pb2
 
 channel = grpc.insecure_channel("wm.suphon.dev:4000")
@@ -123,38 +124,41 @@ def getImageAndNumberOfPeople():
 
 last_timestamp_with_people = 0
 
-while True:
-    (people_count, frame) = getImageAndNumberOfPeople()
+try:
+    while True:
+        (people_count, frame) = getImageAndNumberOfPeople()
 
-    # Create timestamp
-    now = time.time()
-    seconds = int(now)
-    nanos = int((now - seconds) * 1e9)
-    t = Timestamp(seconds=seconds, nanos=nanos)
+        # Create timestamp
+        now = time.time()
+        seconds = int(now)
+        nanos = int((now - seconds) * 1e9)
+        t = Timestamp(seconds=seconds, nanos=nanos)
 
-    # Send data to server
-    obj = edge_service_pb2.SetDataRequest(
-        timestamp=t,
-        number_of_people=people_count,
-        camera_image=cv2.imencode(".jpg", frame)[1].tobytes(),
-    )
-    stub.SetData(obj)
+        # Send data to server
+        obj = edge_service_pb2.SetDataRequest(
+            timestamp=t,
+            number_of_people=people_count,
+            camera_image=cv2.imencode(".jpg", frame)[1].tobytes(),
+        )
+        stub.SetData(obj)
 
-    if people_count > 0:
-        last_timestamp_with_people = time.time()
-    # if time.time() - last_timestamp_with_people > args["cutoff"]:
-    #     set_led_output(False)
-    # else:
-    #     set_led_output(True)
+        if people_count > 0:
+            last_timestamp_with_people = time.time()
+        if time.time() - last_timestamp_with_people > args["cutoff"]:
+            set_led_output(False)
+        else:
+            set_led_output(True)
 
-    # time.sleep(0.5)
-    # show the output frame
-    if args["show"]:
-        cv2.imshow("Frame", frame)
+        # time.sleep(0.5)
+        # show the output frame
+        if args["show"]:
+            cv2.imshow("Frame", frame)
 
-        key = cv2.waitKey(1) & 0xFF
-        # if the `q` key was pressed, break from the loop
-        if key == ord("q"):
-            # do a bit of cleanup
-            cv2.destroyAllWindows()
-            vs.stop()
+            key = cv2.waitKey(1) & 0xFF
+            # if the `q` key was pressed, break from the loop
+            if key == ord("q"):
+                # do a bit of cleanup
+                cv2.destroyAllWindows()
+                vs.stop()
+except KeyboardInterrupt:
+    cleanup()

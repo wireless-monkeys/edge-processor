@@ -23,5 +23,5 @@ This will generate stubs in `src/stubs` directory.
 ## Deploying
 Run
 ```bash
-python3 src/main.py --prototxt src/model/deploy.prototxt.txt --model src/model/deploy.caffemodel --delay-led 5
+python3 src/main.py --prototxt src/model/deploy.prototxt.txt --model src/model/deploy.caffemodel --cutoff 5
 ```

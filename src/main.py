@@ -7,7 +7,8 @@ import time
 import cv2
 import grpc
 from google.protobuf.timestamp_pb2 import Timestamp
-from led import set_led_output, cleanup
+
+# from led import set_led_output, cleanup
 from stubs import edge_service_pb2_grpc, edge_service_pb2
 
 channel = grpc.insecure_channel("wm.suphon.dev:4000")
@@ -64,7 +65,7 @@ CLASSES = [
     "tvmonitor",
 ]
 # COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
-COLOR = (128, 128, 0)
+COLOR = (128, 128, 255)
 
 # load our serialized model from disk
 print("[INFO] loading model...")
@@ -142,13 +143,13 @@ try:
         )
         stub.SetData(obj)
 
-        if people_count > 0:
-            last_timestamp_with_people = time.time()
-            set_led_output(True)
-        elif time.time() - last_timestamp_with_people > args["cutoff"]:
-            set_led_output(False)
-        else:
-            set_led_output(True)
+        # if people_count > 0:
+        #     last_timestamp_with_people = time.time()
+        #     set_led_output(True)
+        # elif time.time() - last_timestamp_with_people > args["cutoff"]:
+        #     set_led_output(False)
+        # else:
+        #     set_led_output(True)
 
         # time.sleep(0.5)
         # show the output frame
@@ -162,4 +163,5 @@ try:
                 cv2.destroyAllWindows()
                 vs.stop()
 except KeyboardInterrupt:
-    cleanup()
+    # cleanup()
+    pass

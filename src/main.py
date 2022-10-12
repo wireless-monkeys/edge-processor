@@ -64,7 +64,7 @@ CLASSES = [
     "tvmonitor",
 ]
 # COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
-COLOR = (255, 0, 0)
+COLOR = (128, 128, 0)
 
 # load our serialized model from disk
 print("[INFO] loading model...")

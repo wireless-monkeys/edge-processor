@@ -143,7 +143,8 @@ try:
 
         if people_count > 0:
             last_timestamp_with_people = time.time()
-        if time.time() - last_timestamp_with_people > args["cutoff"]:
+            set_led_output(True)
+        elif time.time() - last_timestamp_with_people > args["cutoff"]:
             set_led_output(False)
         else:
             set_led_output(True)

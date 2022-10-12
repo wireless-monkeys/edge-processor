@@ -63,7 +63,8 @@ CLASSES = [
     "train",
     "tvmonitor",
 ]
-COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
+# COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
+COLOR = (255, 0, 0)
 
 # load our serialized model from disk
 print("[INFO] loading model...")
@@ -115,7 +116,7 @@ def getImageAndNumberOfPeople():
                     (startX, y),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     0.5,
-                    COLORS[idx],
+                    COLOR,
                     2,
                 )
     return (people_count, frame)
